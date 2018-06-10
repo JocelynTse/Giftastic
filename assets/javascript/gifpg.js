@@ -9,7 +9,8 @@ function gifDisplay() {
     var gif = $(this).attr("data-name");//works for topic buttons (incl newly added buttons)
     //var gif = $("#gif-input").val().trim();//works on submit, displayed topic buttons only read new submission
 
-    let queryURL = "https://api.giphy.com/v1/gifs/search?api_key=59tENANLRiecSxif7YqyoslTuXhBgrL7&q=" + gif + "&limit=1&rating=&offset=0&lang=en"
+    let queryURL = "https://api.giphy.com/v1/gifs/search?q="
+     + gif + "&limit=10&rating=&api_key=59tENANLRiecSxif7YqyoslTuXhBgrL7&"
 
     $.ajax({
         url: queryURL,
@@ -17,15 +18,17 @@ function gifDisplay() {
       }).then(function(response) {
         console.log(queryURL);
         console.log(response);
+
+        let results = response.data;
         
         let gifDiv = $("<div class='gif'>");
 
         //let data = response.data[];
         //console.log(data);
-        //for (let i=0; i<=data.length; i++)  {        
+        for (let i=0; i<=results.length; i++)  {        
 
-        let imageStill = response.data[0].images.original_still.url;
-        let imageAnimate = response.data[0].images.original.url;
+        let imageStill = results[i].images.original_still.url;
+        let imageAnimate = results[i].images.original.url;
         let gifImage = $("<img>").attr("src", imageStill)
         .attr("data-still", imageStill.link(imageStill))
         .attr("data-animate", imageAnimate.link(imageAnimate))
@@ -44,13 +47,13 @@ function gifDisplay() {
           }
         });
 
-        let rating = response.data[0].rating;
+        let rating = results[i].rating;
         console.log(rating);
         let gifRating = $("<p>").text("Rating: " + rating);
         gifDiv.append(gifRating);
-        //};
       
         $("#gifs").append(gifDiv);
+        };
 
         
       });
@@ -62,7 +65,7 @@ function gifNew() {
 
   var gif = $("#gif-input").val().trim();
 
-  let queryURL = "https://api.giphy.com/v1/gifs/search?api_key=59tENANLRiecSxif7YqyoslTuXhBgrL7&q=" + gif + "&limit=1&rating=&offset=0&lang=en"
+  let queryURL = "https://api.giphy.com/v1/gifs/search?api_key=59tENANLRiecSxif7YqyoslTuXhBgrL7&q=" + gif + "&limit=10&rating=&offset=0&lang=en"
 
   $.ajax({
       url: queryURL,
@@ -70,18 +73,18 @@ function gifNew() {
     }).then(function(response) {
       console.log(queryURL);
       console.log(response);
+
+      let results = response.data;
       
       let gifDiv = $("<div class='gif'>");
 
-      //let data = response.data[];
-      //console.log(data);
-      //for (let i=0; i<=data.length; i++)  {        
+      for (let i=0; i<=results.length; i++)  {        
 
-      let imageStill = response.data[0].images.original_still.url;
-      let imageAnimate = response.data[0].images.original.url;
+      let imageStill = results[i].images.original_still.url;
+      let imageAnimate = results[i].images.original.url;
       let gifImage = $("<img>").attr("src", imageStill)
-      .attr("data-still", imageStill.link(imageStill))
-      .attr("data-animate", imageAnimate.link(imageAnimate))
+      //.attr("data-still", imageStill.link(imageStill))
+      //.attr("data-animate", imageAnimate.link(imageAnimate))
       .attr("data-state", "still")
       .addClass("gifState");
       gifDiv.append(gifImage);
@@ -97,13 +100,13 @@ function gifNew() {
         }
       });
 
-      let rating = response.data[0].rating;
+      let rating = results[i].rating;
       console.log(rating);
       let gifRating = $("<p>").text("Rating: " + rating);
       gifDiv.append(gifRating);
-      //};
     
       $("#gifs").append(gifDiv);
+      };
 
       
     });
