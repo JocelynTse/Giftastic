@@ -1,0 +1,32 @@
+#nav    {
+    height: 60px;
+    font-size: 35px;
+    font-weight: 700;
+    color: #f6afce;
+}
+
+#container  {
+    background-image: url("../images/kawaii_fruit.png");
+    padding: 50px;
+    padding-bottom: 150px;
+}
+
+.card-header    {
+    background-color: #9e3b7e;
+}
+
+.card-body   {
+    padding: 10px;
+}
+
+label   {
+    font-size: 20px;
+    font-weight: 300;
+    color: #f6afce;
+}
+
+p   {
+font-size: 15px;
+font-weight: 150;
+color: #009fdb;
+}
