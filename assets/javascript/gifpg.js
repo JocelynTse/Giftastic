@@ -6,55 +6,57 @@ function gifDisplay() {
 
   $("#gifs").empty();
 
-    var gif = $(this).attr("data-name");//works for topic buttons (incl newly added buttons)
-    //var gif = $("#gif-input").val().trim();//works on submit, displayed topic buttons only read new submission
+  var gif = $(this).attr("data-name");//works for topic buttons (incl newly added buttons)
+  //var gif = $("#gif-input").val().trim();//works on submit, displayed topic buttons only read new submission
 
-    let queryURL = "https://api.giphy.com/v1/gifs/search?q="
-     + gif + "&limit=10&rating=&api_key=59tENANLRiecSxif7YqyoslTuXhBgrL7&"
+  let queryURL = "https://api.giphy.com/v1/gifs/search?q="
+    + gif + "&limit=10&rating=&api_key=59tENANLRiecSxif7YqyoslTuXhBgrL7&"
 
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-      }).then(function(response) {
-        console.log(queryURL);
-        console.log(response);
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }).then(function (response) {
+    console.log(queryURL);
+    console.log(response);
 
-        let results = response.data;
-        
-        let gifDiv = $("<div class='gif'>");
+    let results = response.data;
 
-        for (let i=0; i<=results.length; i++)  {        
+    let gifDiv = $("<div class='gif'>");
 
-        let imageStill = results[i].images.original_still.url;
-        let imageAnimate = results[i].images.original.url;
-        let gifImage = $("<img>").attr("src", imageStill)
-        .attr("data-still", imageStill.link(imageStill))
-        .attr("data-animate", imageAnimate.link(imageAnimate))
+    for (let i = 0; i <= results.length; i++) {
+
+      let imageStill = results[i].images.original_still.url;
+      let imageAnimate = results[i].images.original.url;
+      let gifImage = $("<img>").attr("src", imageStill)
+        .attr("data-still", imageStill)
+        .attr("data-animate", imageAnimate)
         .attr("data-state", "still")
         .addClass("gifState");
-        gifDiv.append(gifImage);
+      gifDiv.append(gifImage);
 
-        $(".gifState").on("click", function() {
-          var state = $(this).attr("data-state");
-          if (state === "still") {
-            $(this).attr("src", imageAnimate);
-            $(this).attr("data-state", "animate");
-          } else {
-            $(this).attr("src", imageStill);
-            $(this).attr("data-state", "still");
-          }
-        });
-
-        let rating = results[i].rating;
-        console.log(rating);
-        let gifRating = $("<p>").html("Rating: " + rating);
-        gifDiv.append(gifRating);
-      
-        $("#gifs").append(gifDiv);
-        };
-
-        
+      $(".gifState").on("click", function () {
+        var state = $(this).attr("data-state");
+        let dataAnimate = $(this).attr("data-animate");
+        let dataStill = $(this).attr("data-still");
+        if (state === "still") {
+          $(this).attr("src", dataAnimate);
+          $(this).attr("data-state", "animate");
+        } else {
+          $(this).attr("src", dataStill);
+          $(this).attr("data-state", "still");
+        }
       });
+
+      let rating = results[i].rating;
+      console.log(rating);
+      let gifRating = $("<p>").html("Rating: " + rating);
+      gifDiv.append(gifRating);
+
+      $("#gifs").append(gifDiv);
+    };
+
+
+  });
 
 };
 
@@ -66,34 +68,36 @@ function gifNew() {
   let queryURL = "https://api.giphy.com/v1/gifs/search?api_key=59tENANLRiecSxif7YqyoslTuXhBgrL7&q=" + gif + "&limit=10&rating=&offset=0&lang=en"
 
   $.ajax({
-      url: queryURL,
-      method: "GET"
-    }).then(function(response) {
-      console.log(queryURL);
-      console.log(response);
+    url: queryURL,
+    method: "GET"
+  }).then(function (response) {
+    console.log(queryURL);
+    console.log(response);
 
-      let results = response.data;
-      
-      let gifDiv = $("<div class='gif'>");
+    let results = response.data;
 
-      for (let i=0; i<=results.length; i++)  {        
+    let gifDiv = $("<div class='gif'>");
+
+    for (let i = 0; i <= results.length; i++) {
 
       let imageStill = results[i].images.original_still.url;
       let imageAnimate = results[i].images.original.url;
       let gifImage = $("<img>").attr("src", imageStill)
-      .attr("data-still", imageStill)
-      .attr("data-animate", imageAnimate)
-      .attr("data-state", "still")
-      .addClass("gifState");
+        .attr("data-still", imageStill)
+        .attr("data-animate", imageAnimate)
+        .attr("data-state", "still")
+        .addClass("gifState");
       gifDiv.append(gifImage);
 
-      $(".gifState").on("click", function() {
+      $(".gifState").on("click", function () {
         var state = $(this).attr("data-state");
+        let dataAnimate = $(this).attr("data-animate");
+        let dataStill = $(this).attr("data-still");
         if (state === "still") {
-          $(this).attr("src", "" + imageAnimate + "");
+          $(this).attr("src", dataAnimate);
           $(this).attr("data-state", "animate");
         } else {
-          $(this).attr("src", "" + imageStill + "");
+          $(this).attr("src", dataStill);
           $(this).attr("data-state", "still");
         }
       });
@@ -102,36 +106,36 @@ function gifNew() {
       console.log(rating);
       let gifRating = $("<p>").text("Rating: " + rating);
       gifDiv.append(gifRating);
-    
-      $("#gifs").append(gifDiv);
-      };
 
-      
-    });
+      $("#gifs").append(gifDiv);
+    };
+
+
+  });
 
 };
 
 
-function buttons()  {
-  $("#buttons").empty();  
+function buttons() {
+  $("#buttons").empty();
   for (let i = 0; i < topics.length; i++) {
 
     let gifBtn = $("<button>");
 
     gifBtn.addClass("gif-btn btn btn-warning")
-    .attr("data-name", topics[i])
-    .text(topics[i])
-    .attr("type", "button");
+      .attr("data-name", topics[i])
+      .text(topics[i])
+      .attr("type", "button");
     $("#buttons").append(gifBtn);
   }
 };
 
-$("#add-gif").on("click", function(event)  {
+$("#add-gif").on("click", function (event) {
   event.preventDefault();
 
   var gif = $("#gif-input").val().trim();
 
-  topics.push(gif);  
+  topics.push(gif);
   buttons();
   $("#gifs").empty();
   //gifDisplay();
